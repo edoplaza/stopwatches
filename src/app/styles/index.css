@@ -1,3 +1,96 @@
-body {
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+
+* {
+  border: 0;
+  padding: 0;
+  box-sizing: border-box;
  
 }
+
+body {
+  background: black;
+  display: flex;
+  justify-content: center;
+  font-family: 'Source Sans Pro', sans-serif;
+ 
+}
+
+.stopwatch {
+  width: 540px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.clock {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: white;
+  padding: 200px 0;
+}
+
+.clock-time {
+  font-size: 120px;
+  font-weight: 300;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+
+.button {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: gray;
+  color: white;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.button-start {
+  background: green;
+}
+
+.button-stop {
+  background: red;
+}
+
+.button-lap {
+  background: gray;
+}
+
+.button-reset {
+  background: gray;
+  opacity: 0.8
+}
+
+
+
+
+.lap {
+  padding: 10px 5px;
+  color: white;
+  font-size: 40px;
+  border-top: 1px solid gray;
+  display: flex;
+  justify-content: space-between;
+}
+
+.lap-max {
+  color: red
+}
+
+.lap-min {
+  color: green
+}
+
+
