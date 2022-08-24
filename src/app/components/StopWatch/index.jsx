@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from "react-router";
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getWatch } from "../../features/watchSlice";
 import c from "classnames";
 
-const initialValues = {
-  started: null,
-  laps: [],
-  toggles: [],
-};
-
 function StopWatch() {
-  const [started, setStarted] = useState(initialValues.started);
-  const [toggles, setToggles] = useState(initialValues.toggles);
-  const [laps, setLaps] = useState(initialValues.laps);
+  const [started, setStarted] = useState(null);
+  const [toggles, setToggles] = useState([]);
+  const [laps, setLaps] = useState([]);
   const [diffs, setDiffs] = useState([]);
   const [isStartShown, setIsStartShown] = useState(true);
   const [isStopShown, setIsStopShown] = useState(false);
@@ -20,8 +17,24 @@ function StopWatch() {
   const [maxTime, setMaxTime] = useState(null);
   const [minTime, setMinTime] = useState(null);
 
-  const counterRef = useRef(started);
+  const counterRef = useRef(null);
   const requestRef = useRef(null);
+
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    const id = location.pathname.substring(
+      location.pathname.lastIndexOf("/") + 1
+    );
+    dispatch(getWatch(id)).then((response) => {
+      const { started, toggles, laps } = response.payload.data.result;
+      setStarted(started);
+      setToggles(toggles);
+      setLaps(laps);
+      counterRef.current = started;
+    });
+  }, []);
 
   useEffect(() => {
     return () => cancelAnimationFrame(requestRef.current);
@@ -95,7 +108,7 @@ function StopWatch() {
     <div className="stopwatch">
       <div className="clock">
         <h2 className="clock-time">
-          {new Date(started).toISOString().slice(11, 23)}
+          {new Date(started).toISOString().slice(11, 19)}
         </h2>
       </div>
       <div className="actions">
@@ -141,7 +154,7 @@ function StopWatch() {
                   <span className="lap-label">{`Lap ${index + 1}`}</span>
                   <span className="lap-time">{`${new Date(diff)
                     .toISOString()
-                    .slice(11, 22)}`}</span>
+                    .slice(11, 19)}`}</span>
                 </div>
               );
             })}

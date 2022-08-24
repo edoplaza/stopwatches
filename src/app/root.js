@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Provider } from "react-redux";
+import store from "./store";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import StopWatchList from "./components/StopWatchList";
@@ -11,11 +13,13 @@ import { UniversalRouter } from "./universal-router";
 
 export function Root(props) {
   return (
-    <UniversalRouter location={props.location}>
-      <Switch>
-        <Route exact path="/" component={StopWatchList} />
-        <Route exact path="/stopwatch/:id" component={StopWatch} />
-      </Switch>
-    </UniversalRouter>
+    <Provider store={store}>
+      <UniversalRouter location={props.location}>
+        <Switch>
+          <Route exact path="/" component={StopWatchList} />
+          <Route exact path="/stopwatch/:id" component={StopWatch} />
+        </Switch>
+      </UniversalRouter>
+    </Provider>
   );
 }
