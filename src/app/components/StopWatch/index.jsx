@@ -21,13 +21,7 @@ function StopWatch() {
   const [minTime, setMinTime] = useState(null);
 
   const counterRef = useRef(started);
-  const requestRef = useRef();
-
-  const animateTimer = () => {
-    counterRef.current = counterRef.current + 1000 / 60;
-    setStarted(counterRef.current);
-    requestRef.current = requestAnimationFrame(animateTimer);
-  };
+  const requestRef = useRef(null);
 
   useEffect(() => {
     return () => cancelAnimationFrame(requestRef.current);
@@ -58,6 +52,12 @@ function StopWatch() {
       setDiffs(diffs);
     }
   }, [toggles, laps]);
+
+  const animateTimer = () => {
+    counterRef.current = counterRef.current + 1000 / 60;
+    setStarted(counterRef.current);
+    requestRef.current = requestAnimationFrame(animateTimer);
+  };
 
   function handleStart() {
     setToggles([...toggles, Date.now()]);
@@ -98,7 +98,6 @@ function StopWatch() {
           {new Date(started).toISOString().slice(11, 23)}
         </h2>
       </div>
-
       <div className="actions">
         {isLapShown && (
           <button
@@ -125,7 +124,6 @@ function StopWatch() {
           </button>
         )}
       </div>
-
       <div className="laps">
         {diffs.length > 0 && (
           <div className="laps-items">
