@@ -17,11 +17,11 @@ function StopWatch() {
   const [maxTime, setMaxTime] = useState(null);
   const [minTime, setMinTime] = useState(null);
 
-  const counterRef = useRef(null);
-  const requestRef = useRef(null);
-
   const dispatch = useDispatch();
   const location = useLocation();
+
+  const counterRef = useRef(null);
+  const requestRef = useRef(null);
 
   useEffect(() => {
     const id = location.pathname.substring(

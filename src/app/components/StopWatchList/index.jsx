@@ -25,12 +25,11 @@ function StopWatchList() {
       </div>
       <div className="stopwatch-items">
         {watches.length > 0 &&
-          watches.map(({ __id, laps, started, toggles }) => {
+          watches.map(({ __id, started }) => {
             return (
               <div key={__id}>
                 <Link to={{ pathname: `/stopwatch/${__id}` }}>
                   <div className="stopwatch-item">
-                    {" "}
                     {new Date(started).toISOString().slice(11, 23)}
                   </div>
                 </Link>
