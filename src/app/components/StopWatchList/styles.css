@@ -1,0 +1,28 @@
+.stopwatch-list {
+  width: 540px;
+  padding: 10px;
+}
+
+.stopwatch-list-header,
+.stopwatch-list-footer {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-new,
+.button-more {
+  background: #333333;
+  background-color: #333333;
+  box-shadow: inset 0 0 0 3px #333333, inset 0 0 0 6px #000000;
+  color: #ffffff;
+}
+
+.stopwatch-item {
+  padding: 20px 5px 15px 5px;
+  color: white;
+  font-size: 24px;
+  border-bottom: 1px solid #333333;
+}
+

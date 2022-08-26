@@ -1,0 +1,93 @@
+/* Stopwatch */
+.stopwatch {
+  width: 540px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stopwatch-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.button-small {
+  color: white;
+  border: 1px solid #333333;
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button-small:hover {
+  background-color: white;
+  color: black;
+}
+
+.delete {
+  color: white;
+  border: 1px solid #333333;
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.clock {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: white;
+  padding: 200px 0;
+}
+
+.clock-time {
+  font-size: 160px;
+  font-weight: 300;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.button-start {
+  background-color: #132914;
+  box-shadow: inset 0 0 0 3px #132914, inset 0 0 0 6px #000000;
+  color: #5aa954;
+}
+
+.button-stop {
+  background-color: #2f100e;
+  box-shadow: inset 0 0 0 3px #2f100e, inset 0 0 0 6px #000000;
+  color: #e75444;
+}
+
+.button-lap,
+.button-reset {
+  background: #333333;
+  background-color: #333333;
+  box-shadow: inset 0 0 0 3px #333333, inset 0 0 0 6px #000000;
+  color: #ffffff;
+}
+
+.lap {
+  padding: 20px 5px 15px 5px;
+  color: white;
+  font-size: 24px;
+  border-top: 1px solid #333333;
+  display: flex;
+  justify-content: space-between;
+}
+
+.lap-max {
+  color: #e75444;
+}
+
+.lap-min {
+  color: #5aa954;
+}

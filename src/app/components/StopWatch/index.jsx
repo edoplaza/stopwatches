@@ -1,12 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getWatch } from "../../features/watchSlice";
+import {
+  getWatch,
+  deleteWatch,
+  resetWatch,
+  addToggle,
+  addLap,
+} from "../../features/watchSlice";
 import c from "classnames";
 
+import "./styles.css";
+
 function StopWatch() {
-  const [started, setStarted] = useState(null);
   const [toggles, setToggles] = useState([]);
   const [laps, setLaps] = useState([]);
   const [diffs, setDiffs] = useState([]);
@@ -17,22 +25,32 @@ function StopWatch() {
   const [maxTime, setMaxTime] = useState(null);
   const [minTime, setMinTime] = useState(null);
 
+  const [timer, setTimer] = useState(null);
+
   const dispatch = useDispatch();
   const location = useLocation();
 
   const counterRef = useRef(null);
   const requestRef = useRef(null);
 
+  const id = location.pathname.substring(
+    location.pathname.lastIndexOf("/") + 1
+  );
+
   useEffect(() => {
-    const id = location.pathname.substring(
-      location.pathname.lastIndexOf("/") + 1
-    );
     dispatch(getWatch(id)).then((response) => {
-      const { started, toggles, laps } = response.payload.data.result;
-      setStarted(started);
-      setToggles(toggles);
-      setLaps(laps);
-      counterRef.current = started;
+      if (response.payload) {
+        const { started, toggles, laps } = response.payload.data.result;
+        if (toggles.length > 0) {
+          setTimer(Date.now() - started);
+          counterRef.current = Date.now() - started;
+        } else {
+          handleReset();
+        }
+
+        setToggles(toggles);
+        setLaps(laps);
+      }
     });
   }, []);
 
@@ -68,53 +86,91 @@ function StopWatch() {
 
   const animateTimer = () => {
     counterRef.current = counterRef.current + 1000 / 60;
-    setStarted(counterRef.current);
+    setTimer(counterRef.current);
     requestRef.current = requestAnimationFrame(animateTimer);
   };
 
   function handleStart() {
-    setToggles([...toggles, Date.now()]);
+    const now = Date.now();
+    setToggles([...toggles, now]);
     requestRef.current = requestAnimationFrame(animateTimer);
     setIsStartShown(false);
     setIsStopShown(true);
     setIsResetShown(false);
     setIsLapShown(true);
+
+    dispatch(addToggle({ id: id, time: now })).then((response) => {
+      console.log("response", response);
+    });
+  }
+
+  function handleDelete() {
+    dispatch(deleteWatch(id)).then((response) => {
+      if (response.payload) {
+        window.location.href = "/";
+      }
+    });
   }
 
   function handleStop() {
-    setToggles([...toggles, Date.now()]);
+    const now = Date.now();
+    setToggles([...toggles, now]);
     cancelAnimationFrame(requestRef.current);
     setIsStartShown(true);
     setIsStopShown(false);
     setIsLapShown(false);
     setIsResetShown(true);
+
+    dispatch(addToggle({ id: id, time: now })).then((response) => {
+      console.log("response", response);
+    });
   }
 
   function handleLaps() {
-    setLaps([...laps, Date.now()]);
+    const now = Date.now();
+    setLaps([...laps, now]);
+    dispatch(addLap({ id: id, time: now })).then((response) => {
+      console.log("response", response);
+    });
   }
 
   function handleReset() {
-    setStarted(0);
+    setTimer(0);
     counterRef.current = 0;
     setToggles([]);
     setLaps([]);
     setDiffs([]);
     setIsResetShown(false);
     setIsLapShown(true);
+
+    dispatch(resetWatch({ id: id, started: Date.now() })).then((response) => {
+      if (response.payload) {
+        console.log("watch has been reset");
+      }
+    });
   }
 
   return (
     <div className="stopwatch">
+      <div className="stopwatch-header">
+        <Link to="/">
+          <span className="button-small">Home</span>
+        </Link>
+        <span className="button-small" onClick={() => handleDelete()}>
+          Delete
+        </span>
+      </div>
       <div className="clock">
         <h2 className="clock-time">
-          {new Date(started).toISOString().slice(11, 19)}
+          {new Date(timer).toISOString().slice(14, 22)}
         </h2>
       </div>
       <div className="actions">
         {isLapShown && (
           <button
-            className="button button-lap"
+            className={c("button button-lap", {
+              "button-disabled": isStartShown,
+            })}
             onClick={() => handleLaps()}
             disabled={isStartShown}
           >
@@ -154,7 +210,7 @@ function StopWatch() {
                   <span className="lap-label">{`Lap ${index + 1}`}</span>
                   <span className="lap-time">{`${new Date(diff)
                     .toISOString()
-                    .slice(11, 19)}`}</span>
+                    .slice(14, 22)}`}</span>
                 </div>
               );
             })}
