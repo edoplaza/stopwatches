@@ -45,7 +45,8 @@ function StopWatch() {
           setTimer(Date.now() - started);
           counterRef.current = Date.now() - started;
         } else {
-          handleReset();
+          setTimer(0);
+          counterRef.current = 0;
         }
 
         setToggles(toggles);
@@ -100,7 +101,9 @@ function StopWatch() {
     setIsLapShown(true);
 
     dispatch(addToggle({ id: id, time: now })).then((response) => {
-      console.log("response", response);
+      if (response.payload) {
+        console.log("response", response);
+      }
     });
   }
 
@@ -122,7 +125,9 @@ function StopWatch() {
     setIsResetShown(true);
 
     dispatch(addToggle({ id: id, time: now })).then((response) => {
-      console.log("response", response);
+      if (response.payload) {
+        console.log("response", response);
+      }
     });
   }
 
@@ -130,7 +135,9 @@ function StopWatch() {
     const now = Date.now();
     setLaps([...laps, now]);
     dispatch(addLap({ id: id, time: now })).then((response) => {
-      console.log("response", response);
+      if (response.payload) {
+        console.log("response", response);
+      }
     });
   }
 
